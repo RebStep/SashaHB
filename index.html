@@ -165,8 +165,9 @@ body{font-family:"Onest",system-ui,sans-serif;color:var(--ink);background:var(--
 @media(prefers-reduced-motion:reduce){.bln,.foot .bln{opacity:1;animation:none}}
 
 /* ---- MINI PLAYER ---- */
-.music-wrap{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;display:none;
-  width:min(92vw,330px);align-items:center;gap:12px;padding:8px 16px 8px 8px;border-radius:99px;
+.music-wrap{position:fixed;left:14px;bottom:14px;z-index:40;display:none;overflow:hidden;
+  width:62px;align-items:center;gap:0;padding:7px;border-radius:99px;
+  transition:width .6s cubic-bezier(.16,1,.3,1),gap .6s,padding .6s;
   background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.95);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 18px 40px -16px rgba(47,82,115,.6)}
 .music-btn{position:relative;flex:none;width:46px;height:46px;border:none;border-radius:50%;cursor:pointer;
@@ -175,7 +176,9 @@ body{font-family:"Onest",system-ui,sans-serif;color:var(--ink);background:var(--
 .music-btn:active{transform:scale(.92)}
 .music-btn svg{width:18px;height:18px;fill:#fff}
 .music-btn .i-pause{display:none}.music-btn.playing .i-play{display:none}.music-btn.playing .i-pause{display:block}
-.pl-body{flex:1;min-width:0}
+.music-wrap.on{width:min(calc(100vw - 28px),330px);gap:12px;padding:7px 16px 7px 7px}
+.pl-body{flex:1;min-width:0;opacity:0;transition:opacity .3s}
+.music-wrap.on .pl-body{opacity:1;transition:opacity .5s .25s}
 .pl-title{font-size:13.5px;font-weight:600;color:var(--steel);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl-sub{font-size:11.5px;color:var(--ink);opacity:.7;margin-bottom:5px}
 .seek{display:block;width:100%;height:14px;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer;accent-color:var(--blue)}
@@ -184,8 +187,8 @@ body{font-family:"Onest",system-ui,sans-serif;color:var(--ink);background:var(--
 .seek::-moz-range-track{height:4px;border-radius:4px;background:#cfe0f0}
 .seek::-moz-range-progress{height:4px;border-radius:4px;background:var(--blue)}
 .seek::-moz-range-thumb{width:10px;height:10px;border-radius:50%;background:var(--blue-deep);border:2px solid #fff}
-.eq{display:none;gap:2px;align-items:flex-end;height:14px;flex:none}
-.music-wrap.on .eq{display:flex}
+.eq{display:flex;gap:2px;align-items:flex-end;height:14px;flex:none;width:0;opacity:0;transition:opacity .3s}
+.music-wrap.on .eq{width:12px;opacity:1;transition:opacity .5s .25s}
 .eq b{width:3px;background:var(--blue);border-radius:2px;animation:eq 1s ease-in-out infinite}
 .eq b:nth-child(2){animation-delay:.2s}.eq b:nth-child(3){animation-delay:.4s}
 @keyframes eq{0%,100%{height:4px}50%{height:14px}}
@@ -393,8 +396,6 @@ if(DATA.music){
   bgm.addEventListener("timeupdate",()=>{if(bgm.duration){seek.value=(bgm.currentTime/bgm.duration)*1000;seek.style.setProperty("--p",(seek.value/10)+"%");}});
   seek.addEventListener("input",()=>{if(bgm.duration){bgm.currentTime=(seek.value/1000)*bgm.duration;seek.style.setProperty("--p",(seek.value/10)+"%");}});
   play();
-  ["pointerdown","touchstart","keydown","scroll"].forEach(ev=>
-    addEventListener(ev,()=>{if(bgm.paused)play();},{once:true,passive:true}));
 }
 
 // лёгкий параллакс героя
